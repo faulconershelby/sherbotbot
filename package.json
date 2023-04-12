@@ -1,5 +1,23 @@
 {
   "dependencies": {
-    "dotenv": "^16.0.3"
-  }
+    "dotenv": "^16.0.3",
+    "tmi.js": "^1.8.5"
+  },
+  "name": "sherbotbot",
+  "version": "1.0.0",
+  "description": "twitch bot for sherbot ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/faulconershelby/sherbotbot.git"
+  },
+  "author": "sherbot",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/faulconershelby/sherbotbot/issues"
+  },
+  "homepage": "https://github.com/faulconershelby/sherbotbot#readme"
 }
