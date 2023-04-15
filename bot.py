@@ -59,11 +59,28 @@ async def roll_dice(message):
   if True: 
     sides = 6
   # @todo why no work??
-  if str(message.message.content).isalpha() is False:
-    sides = float(''.join([i for i in message.message.content if i.isdigit()]))
+  if str(message.message).isalpha() is False:
+    #store the numbers in message in a variable
+    #convert the variable to an integer
+    sides_list = []
+    for i in message.message.content:
+      if i.isdigit():
+        sides_list.append(i)
+    for j in sides_list:
+      j = int(j)
+    print("message numbers as list ", sides_list)
+    # sides = float(''.join([i for i in message.message.content if i.isdigit()]))
+    #join strings in sides_list into 1 string
+    sides = ''.join(sides_list)
+    #convert joined string into an integer
+    print("after converting list to single string", sides)
+    if len(sides_list) == 0: 
+      sides = 6
+    else:
+      sides = int(sides)
 
-  if sides > 0:
-    roll_result = random.randint(1, int(sides))
+  if sides:
+    roll_result = random.randint(1, sides)
     await message.send(f'🎲 {message.author.name} rolled {roll_result} 🎲')
   else:
     await message.send(f'please use a positive number')
@@ -132,6 +149,10 @@ async def love_emote(message):
 @bot.command(name="figaro")
 async def figaro_emote(message):
   await message.send("sherbo4Catscream sherbo4Fig sherbo4Figaroscreams sherbo4Fig sherbo4Figaroscreams sherbo4Fig sherbo4Figaroscreams 🌸🌸🌸 sherbo4Fig sherbo4Figaroscreams sherbo4Fig sherbo4Figaroscreams sherbo4Fig sherbo4Figaroscreams sherbo4Catscream")
+
+@bot.command(name="420")
+async def four_twenty_emote(message):
+  await message.send("🍃 sherbo4420blaze sherbo4Towlie 💨 sherbo4420blaze sherbo4Towlie sherbo4420blaze sherbo4Towlie sherbo4420blaze sherbo4Towlie sherbo4420blaze sherbo4Towlie sherbo4420blaze sherbo4Towlie sherbo4420blaze sherbo4Towlie 🍃")
 
 @bot.event()
 async def pokemon_appears(message):
