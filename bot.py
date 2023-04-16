@@ -1,5 +1,7 @@
 import os
+import re
 import random
+import openai
 from twitchio import Message
 from twitchio.ext import commands
 from twitchio.errors import TwitchIOException
@@ -21,7 +23,23 @@ bot = commands.Bot(
     initial_channels=[os.environ['CHANNEL']]
 )
 
+open.api_key = os.environ['OPENAI_KEY']
 
+#function to generate response using gpt-3
+#takes in users message as input, adds formatting, sends to gpt3 using openai api
+# returns response from gpt3
+
+def generate_response(message):
+  prompt = f"{message.author.name} said: {message.message.content}"
+  response = openai.Completion.create(
+    engine="text-davinci-002",
+    prompt=prompt,
+    max_tokens=50,
+    n=1, 
+    stop=None,
+    temperature=0.9,
+  )
+  return response.choices[0].text.strip()
 
 @bot.event() 
 async def event_ready():
@@ -50,15 +68,26 @@ async def on_message_handler(channel: str, message: Message) -> None:
 async def say_hello(message):
     await message.send(f' sherbo4Catscream Hello, {message.author.name} <3!')
 
+# integrate generate_response and gpt3
+@bot.command(name='gpt3')
+async def gpt3_response(message):
+  #ignore message sent by bot itself
+  if message.author.name.lower == os.environ['BOT_NICK'].lower():
+    return  
+  #generate response from gpt3
+  response = generate_response(message.message.content)
+  #send response to chat
+  await message.send(response)
+
 @bot.command(name='dice')
 async def roll_dice(message):
   # remove characters from the message that aren't numbers
   print('***MESSGE***', message)
-  print('message.message', message.message.content)
+  print('***message.message***', message.message.content)
   
   if True: 
     sides = 6
-  # @todo why no work??
+
   if str(message.message).isalpha() is False:
     #store the numbers in message in a variable
     #convert the variable to an integer
@@ -69,7 +98,6 @@ async def roll_dice(message):
     for j in sides_list:
       j = int(j)
     print("message numbers as list ", sides_list)
-    # sides = float(''.join([i for i in message.message.content if i.isdigit()]))
     #join strings in sides_list into 1 string
     sides = ''.join(sides_list)
     #convert joined string into an integer
@@ -92,43 +120,57 @@ async def sherbot_commands(message):
   pass
 
 # @todo: add a command to tell sun sign of user if they add their birthday
-@bot.command(name= 'sun-sign')
+@bot.command(name= 'sunsign')
 async def sun_sign_command(message):
-  # create dictionary to hold all astrological signs
-  # key will be name of the sign
-  # value will be a dictionary with key as month and value as list of days in that month
-  # for list of days, use range()
-  astrology_signs= {
-    'aries': {'march': range(21, 31), 'april': range(1, 19)},
-    'taurus': {'april': range(20, 30), 'may': range(1, 20)},
-    'gemini': {'may': range(21, 31), 'june': range(1, 20)},
-    'cancer': {'june': range(21, 30), 'july': range(1, 22)},
-    'leo': {'july': range(23, 31), 'august': range(1, 22)},
-    'virgo': {'august': range(23, 31), 'september': range(1, 22)},
-    'libra': {'september': range(23, 30), 'october': range(1, 22)},
-    'scorpio': {'october': range(23, 31), 'november': range(1, 21)},
-    'sagittarius': {'november': range(22, 30), 'december': range(1, 21)},
-    'capricorn': {'december': range(22, 31), 'january': range(1, 19)},
-    'aquarius': {'january': range(20, 31), 'february': range(1, 18)},
-    'pisces': {'february': range(19, 29), 'march': range(1, 20)}
-  }
-  months = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december']
+
 
   # create a function that takes in a message and returns the user's birthday
   # if the user doesn't have a birthday, return ValueError('valid birthday pls')
   # if the user has a birthday, continue
   def get_birthday(message):
-    # if message content contains a string from months and a number between (1-31)
-    # store month and day in variables
-    # continue
-    # else return ValueError('valid birthday pls')
-    # look for key in astrology_signs that matches the month variablee
-    # look for value in astrology_signs that matches the day variable for that month
-    # return the key and value of the astrology_signs dictionary
-    pass
+    astrology_signs= {
+      'aries': {'march': range(21, 31), 'april': range(1, 19)},
+      'taurus': {'april': range(20, 30), 'may': range(1, 20)},
+      'gemini': {'may': range(21, 31), 'june': range(1, 20)},
+      'cancer': {'june': range(21, 30), 'july': range(1, 22)},
+      'leo': {'july': range(23, 31), 'august': range(1, 22)},
+      'virgo': {'august': range(23, 31), 'september': range(1, 22)},
+      'libra': {'september': range(23, 30), 'october': range(1, 22)},
+      'scorpio': {'october': range(23, 31), 'november': range(1, 21)},
+      'sagittarius': {'november': range(22, 30), 'december': range(1, 21)},
+      'capricorn': {'december': range(22, 31), 'january': range(1, 19)},
+      'aquarius': {'january': range(20, 31), 'february': range(1, 18)},
+      'pisces': {'february': range(19, 29), 'march': range(1, 20)}
+    }
+    months_list = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december']
+   
+   # create a list to hold all elements in message.message
+    # combine all element in list to single string
+    # then search for month and day in string
+    # if month and day are found, store month and day in variables
+
+    for month in months_list:
+      if month in str(message.message.content).lower():
+        for day in range(1, 32):
+          if str(day) in str(message.message.content).lower():
+            user_month = month
+            user_day = int(str(day))
+            print(user_month, user_day)
+
+            for sign, months in astrology_signs.items():
+              if month in months and day in months[month]:
+                user_sign = sign
+                return user_sign
+    raise  Exception('valid birthday pls') 
   # if user calls sun-sign command, return their sign with get_birthday() function
   # if user calls sun-sign command and doesn't have a birthday, return ValueError('valid birthday pls')
-
+    
+  try:
+    user_sign = get_birthday(message)
+    if user_sign:
+      await message.send(f'Your sun sign is {user_sign.capitalize()}')
+  except ValueError as e:
+    print(str(e))
 
 @bot.command(name='subraid')
 async def subraid(message):
@@ -152,13 +194,26 @@ async def figaro_emote(message):
 
 @bot.command(name="420")
 async def four_twenty_emote(message):
-  await message.send("🍃 sherbo4420blaze sherbo4Towlie 💨 sherbo4420blaze sherbo4Towlie sherbo4420blaze sherbo4Towlie sherbo4420blaze sherbo4Towlie sherbo4420blaze sherbo4Towlie sherbo4420blaze sherbo4Towlie sherbo4420blaze sherbo4Towlie 🍃")
+  await message.send("🍃 sherbo4420blaze sherbo4Towlie 💨 sherbo4420blaze sherbo4Towlie 💨 sherbo4420blaze sherbo4Towlie 💨 sherbo4420blaze sherbo4Towlie 💨 sherbo4420blaze sherbo4Towlie 💨 sherbo4420blaze sherbo4Towlie 💨 sherbo4420blaze sherbo4Towlie 🍃")
+
+@bot.command(name="battle")
+async def battle_streamraiders_url(message):
+  await message.send("!battle")
+
+@bot.command(name="addquote")
+async def add_quote(message):
+  await message.send("!addquote")
+
+@bot.command(name="quote")
+async def quote(message):
+  await message.send("!quote")
+
 
 @bot.event()
 async def pokemon_appears(message):
-  if "pokemon" in str(message.message):
+  if "Pokemon" in str(message.message):
     await message.send("sherbo4Pinocchio")
-  if message.author.name == "PokemonCommunityGame" and "90s" in message.message:
+  if message.author.name == "PokemonCommunityGame" and "90s" in message.message.content:
 
     await message.send("!pokecheck")
 
@@ -168,6 +223,7 @@ async def test(message):
 
 bot.event(event_ready) # type: ignore
 bot.event(on_message_handler) # type: ignore
+bot.event(pokemon_appears) # type: ignore
 
 
 #bot.py
