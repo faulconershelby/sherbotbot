@@ -24,7 +24,7 @@ bot = commands.Bot(
     initial_channels=[os.environ['CHANNEL']]
 )
 
-open.api_key = os.environ['OPENAI_KEY']
+openapi_key = os.environ['OPENAI_KEY']
 
 #function to generate response using gpt-3
 #takes in users message as input, adds formatting, sends to gpt3 using openai api
