@@ -2,6 +2,7 @@ import os
 import re
 import random
 import openai
+import twitchio
 from twitchio import Message
 from twitchio.ext import commands
 from twitchio.errors import TwitchIOException
