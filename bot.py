@@ -40,7 +40,20 @@ def generate_response(message):
     stop=None,
     temperature=0.9,
   )
-  return response.choices[0].text.strip()
+  print(f"type of response: {type(response)}")
+  print(f"value of response: {response}")
+
+  choices = []
+  if response.choices is not None:
+    for choice in response.choices:
+      choices.append(choice)
+  
+  if len(choices) > 0:
+    return choices[0].text.strip()
+  else:
+    return "I'm sorry, I don't know how to respond to that."
+  
+
 
 @bot.event() 
 async def event_ready():
@@ -144,8 +157,8 @@ async def sun_sign_command(message):
       'pisces': {'february': range(19, 29), 'march': range(1, 20)}
     }
     months_list = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december']
-   
-   # create a list to hold all elements in message.message
+
+    # create a list to hold all elements in message.message
     # combine all element in list to single string
     # then search for month and day in string
     # if month and day are found, store month and day in variables
