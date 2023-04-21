@@ -79,7 +79,7 @@ async def on_message_handler(channel: str, message: Message) -> None:
 async def say_hello(message):
     await message.send(f' sherbo4Catscream Hello, {message.author.name} <3!')
 
-# integrate generate_response and gpt3
+#@todo integrate generate_response and gpt3
 # @bot.command(name='gpt3')
 # async def gpt3_response(message):
 #   #ignore message sent by bot itself
@@ -143,19 +143,20 @@ async def sun_sign_command(message):
   # if the user has a birthday, continue
   def get_birthday(message):
     astrology_signs= {
-      'march': {'aries': range(21, 31), 'pisces': range(1, 20)},
-      'april': {'taurus': range(20, 30), 'aries': range(1, 19)},
-      'may': {'gemini': range(21, 31), 'taurus': range(1, 20)},
-      'june': {'cancer': range(21, 30), 'gemini': range(1, 20)},
-      'july': {'leo': range(23, 31), 'cancer': range(1, 22)},
-      'august': {'virgo': range(23, 31), 'leo': range(1, 22)},
-      'september': {'libra': range(23, 30), 'virgo': range(1, 22)},
-      'october': {'scorpio': range(23, 31), 'libra': range(1, 22)},
-      'november': {'sagittarius': range(22, 30), 'scorpio': range(1, 21)},
-      'december': {'capricorn': range(22, 31), 'sagittarius': range(1, 21)},
-      'january': {'aquarius': range(20, 31), 'capricorn': range(1, 19)},
-      'february': {'pisces': range(19, 29), 'aquarius': range(1, 18)}
-  }
+        'march': {'aries': range(21, 32), 'pisces': range(1, 21)},
+        'april': {'taurus': range(20, 31), 'aries': range(1, 20)},
+        'may': {'gemini': range(21, 32), 'taurus': range(1, 21)},
+        'june': {'cancer': range(21, 31), 'gemini': range(1, 21)},
+        'july': {'leo': range(23, 32), 'cancer': range(1, 23)},
+        'august': {'virgo': range(23, 32), 'leo': range(1, 23)},
+        'september': {'libra': range(23, 31), 'virgo': range(1, 23)},
+        'october': {'scorpio': range(23, 32), 'libra': range(1, 23)},
+        'november': {'sagittarius': range(22, 31), 'scorpio': range(1, 22)},
+        'december': {'capricorn': range(22, 32), 'sagittarius': range(1, 22)},
+        'january': {'aquarius': range(20, 32), 'capricorn': range(1, 20)},
+        'february': {'pisces': range(19, 30), 'aquarius': range(1, 19)}
+    }
+
     # months_list = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december']
     message_content = str(message.message.content).lower()
     words = message_content.split()[1:3]
@@ -178,12 +179,11 @@ async def sun_sign_command(message):
     # if not(user_month and user_day not in astrology_signs[user_month].values()):
     #   raise ValueError('invalid day')
 
-    for sign_month in astrology_signs.values():
-      for sign, day_range in sign_month.items():
-        if user_month == month and user_day in day_range:
-          print('sign', sign)
-          return sign
-      
+    for sign, day_range in sign_for_month.items():
+      if user_day in day_range:
+        print('sign', sign)
+        return sign
+    raise ValueError('valid brithday pls')
   # if user calls sun-sign command, return their sign with get_birthday() function
   # if user calls sun-sign command and doesn't have a birthday, return ValueError('valid birthday pls')
   try:
