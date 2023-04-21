@@ -142,9 +142,6 @@ async def sherbot_commands(message):
 
 @bot.command(name= 'sunsign')
 async def sun_sign_command(message):
-  # create a function that takes in a message and returns the user's birthday
-  # if the user doesn't have a birthday, return ValueError('valid birthday pls')
-  # if the user has a birthday, continue
   message_content = str(message.message.content).lower()
   if len(message_content.split()) < 3:
     await message.send(f'please enter a valid birthday in the format ~sunsign month day')
@@ -159,7 +156,6 @@ async def sun_sign_command(message):
   user_month = month.lower().strip()
   user_day = int(day.strip(','))
   print('user_month', user_month, 'user_day', user_day)
-
 
   def get_birthday(message):
     astrology_signs= {
@@ -184,8 +180,8 @@ async def sun_sign_command(message):
         print('sign', sign)
         return sign
     raise ValueError('valid brithday pls')
+  
   # if user calls sun-sign command, return their sign with get_birthday() function
-  # if user calls sun-sign command and doesn't have a birthday, return ValueError('valid birthday pls')
   try:
     user_sign = get_birthday(message)
     today = datetime.datetime.now().strftime('%B %d').lower()
