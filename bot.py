@@ -30,28 +30,28 @@ openapi_key = os.environ['OPENAI_KEY']
 #takes in users message as input, adds formatting, sends to gpt3 using openai api
 # returns response from gpt3
 
-def generate_response(message):
-  prompt = f"{message.author.name} said: {message.message.content}"
-  response = openai.Completion.create(
-    engine="text-davinci-002",
-    prompt=prompt,
-    max_tokens=50,
-    n=1, 
-    stop=None,
-    temperature=0.9,
-  )
-  print(f"type of response: {type(response)}")
-  print(f"value of response: {response}")
+# def generate_response(message):
+#   prompt = f"{message.author.name} said: {message.message.content}"
+#   response = openai.Completion.create(
+#     engine="text-davinci-002",
+#     prompt=prompt,
+#     max_tokens=50,
+#     n=1, 
+#     stop=None,
+#     temperature=0.9,
+#   )
+#   print(f"type of response: {type(response)}")
+#   print(f"value of response: {response}")
 
-  choices = []
-  if response.choices is not None:
-    for choice in response.choices:
-      choices.append(choice)
+#   choices = []
+#   if response.choices is not None:
+#     for choice in response.choices:
+#       choices.append(choice)
   
-  if len(choices) > 0:
-    return choices[0].text.strip()
-  else:
-    return "I'm sorry, I don't know how to respond to that."
+#   if len(choices) > 0:
+#     return choices[0].text.strip()
+#   else:
+#     return "I'm sorry, I don't know how to respond to that."
   
 
 
@@ -64,9 +64,6 @@ async def event_ready():
 async def on_message_handler(channel: str, message: Message) -> None:
   assert message.author.name is not None
   assert message.content is not None
-
-# print messages -- might need to look into parsing the object from twitch
-# @todo check twitchio docs
   message_dict = vars(message)
   for key, value in message_dict.items():
     print(f"{key}: {value}")
@@ -83,15 +80,15 @@ async def say_hello(message):
     await message.send(f' sherbo4Catscream Hello, {message.author.name} <3!')
 
 # integrate generate_response and gpt3
-@bot.command(name='gpt3')
-async def gpt3_response(message):
-  #ignore message sent by bot itself
-  if message.author.name.lower == os.environ['BOT_NICK'].lower():
-    return  
-  #generate response from gpt3
-  response = generate_response(message.message.content)
-  #send response to chat
-  await message.send(response)
+# @bot.command(name='gpt3')
+# async def gpt3_response(message):
+#   #ignore message sent by bot itself
+#   if message.author.name.lower == os.environ['BOT_NICK'].lower():
+#     return  
+#   #generate response from gpt3
+#   response = generate_response(message.message.content)
+#   #send response to chat
+#   await message.send(response)
 
 @bot.command(name='dice')
 async def roll_dice(message):
@@ -127,8 +124,13 @@ async def roll_dice(message):
   else:
     await message.send(f'please use a positive number')
 
+@bot.command(name='coin')
+async def flip_coin(message):
+  flip_result = random.choice(['heads', 'tails'])
+  await message.send(f'🪙 {message.author.name} flipped {flip_result} 🪙')
+
 # @todo: add a command to list all commands
-@bot.command(name='sherbot-commands')
+@bot.command(name='sherbotbot')
 async def sherbot_commands(message):
   # create a function that makes and returns a list of commands
   pass
