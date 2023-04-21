@@ -3,6 +3,7 @@ import re
 import random
 import openai
 import twitchio
+import datetime
 from twitchio import Message
 from twitchio.ext import commands
 from twitchio.errors import TwitchIOException
@@ -132,15 +133,34 @@ async def flip_coin(message):
 # @todo: add a command to list all commands
 @bot.command(name='sherbotbot')
 async def sherbot_commands(message):
-  # create a function that makes and returns a list of commands
-  pass
+  '''list all available commands'''
+  print(bot.commands.keys())
+  commands = []
+  commands = ['~' + command for command in bot.commands.keys()]
+  command_str = ", ".join(commands)
+  await message.send(f'🤖 here are all available sherbotbot commands: {command_str} 🤖')
 
-# @todo: add a command to tell sun sign of user if they add their birthday
 @bot.command(name= 'sunsign')
 async def sun_sign_command(message):
   # create a function that takes in a message and returns the user's birthday
   # if the user doesn't have a birthday, return ValueError('valid birthday pls')
   # if the user has a birthday, continue
+  message_content = str(message.message.content).lower()
+  if len(message_content.split()) < 3:
+    await message.send(f'please enter a valid birthday in the format ~sunsign month day')
+    return
+  words = message_content.split()[1:3]
+  user_month = None
+  user_day = None
+  print('words', words, "message_content", message_content)
+  month = words[0]
+  day = words[1]
+  print('month', month, 'day', day)
+  user_month = month.lower().strip()
+  user_day = int(day.strip(','))
+  print('user_month', user_month, 'user_day', user_day)
+
+
   def get_birthday(message):
     astrology_signs= {
         'march': {'aries': range(21, 32), 'pisces': range(1, 21)},
@@ -157,27 +177,7 @@ async def sun_sign_command(message):
         'february': {'pisces': range(19, 30), 'aquarius': range(1, 19)}
     }
 
-    # months_list = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december']
-    message_content = str(message.message.content).lower()
-    words = message_content.split()[1:3]
-    user_month = None
-    user_day = None
-    print('words', words, "message_content", message_content)
-
-    month = words[0]
-    day = words[1]
-    print('month', month, 'day', day)
-
-    user_month = month.lower().strip()
-    user_day = int(day.strip(','))
-    print('user_month', user_month, 'user_day', user_day)
-
     sign_for_month = astrology_signs[user_month]
-
-    # if user_month and user_month not in astrology_signs:
-    #   raise ValueError('invalid month')
-    # if not(user_month and user_day not in astrology_signs[user_month].values()):
-    #   raise ValueError('invalid day')
 
     for sign, day_range in sign_for_month.items():
       if user_day in day_range:
@@ -188,8 +188,14 @@ async def sun_sign_command(message):
   # if user calls sun-sign command and doesn't have a birthday, return ValueError('valid birthday pls')
   try:
     user_sign = get_birthday(message)
+    today = datetime.datetime.now().strftime('%B %d').lower()
+    user_date = f'{user_month} {user_day}'
+    print('today', today, 'user_date', user_date)
     if user_sign:
-      await message.send(f'Your sun sign is {user_sign.capitalize()}')
+      if user_date == today:
+        await message.send(f'Happy Birthday!🎂 Your sun sign is {user_sign.capitalize()}.')
+      else:
+        await message.send(f'Your sun sign is {user_sign.capitalize()}.')
   except ValueError as e:
     print(str(e))
 
