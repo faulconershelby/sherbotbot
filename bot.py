@@ -248,6 +248,17 @@ async def add_quote(message):
 async def quote(message):
   await message.send("!quote")
 
+@bot.command(name="jb")
+async def jb(message):
+  await message.send("!jackbox")
+
+@bot.command(name="jackbox")
+async def jackbox(message):
+  await message.send("!jackbox")
+
+@bot.command(name="ultra")
+async def ultra(message):
+  await message.send("!pokecatch ultraball")
 
 @bot.event()
 async def pokemon_appears(message):
