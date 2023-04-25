@@ -3,6 +3,7 @@ import re
 import random
 import openai
 import twitchio
+import requests
 import datetime
 from twitchio import Message
 from twitchio.ext import commands
@@ -26,6 +27,7 @@ bot = commands.Bot(
 )
 
 openapi_key = os.environ['OPENAI_KEY']
+OPENWEATHER_KEY = os.environ['OPENWEATHER_KEY']
 
 #function to generate response using gpt-3
 #takes in users message as input, adds formatting, sends to gpt3 using openai api
@@ -195,6 +197,50 @@ async def sun_sign_command(message):
   except ValueError as e:
     print(str(e))
 
+@bot.command(name="weather")
+async def weather_command(message, location):
+  url = f'https://api.openweathermap.org/data/2.5/weather?q={location}&appid={OPENWEATHER_KEY}&units=imperial'
+  response = requests.get(url)
+  data = response.json()
+  if response.status_code == 200:
+    temperature= data['main']['temp']
+    feels_like = data['main']['feels_like']
+    description = data['weather'][0]['description']
+    city = data['name']
+    if ('c' or 'C') in message.message.content.lower():
+      temperature = round((temperature - 32) * 5/9)
+      feels_like = round((feels_like - 32) * 5/9)
+      temp_unit = 'C'
+    else:
+      temp_unit = 'F'
+    if description:
+      if description == 'clear sky':
+        await message.send(f'🌞 {city} is {temperature}°{temp_unit} and {description}. It feels like {feels_like}°{temp_unit}. 🌞')
+      if description == 'few clouds':
+        await message.send(f'🌤️ {city} is {temperature}°{temp_unit} and {description}. It feels like {feels_like}°{temp_unit}. 🌤️')
+      if description == 'scattered clouds':
+        await message.send(f'🌤️ {city} is {temperature}°{temp_unit} and {description}. It feels like {feels_like}°{temp_unit}. 🌤️')
+      if description == 'broken clouds':
+        await message.send(f'☁️ {city} is {temperature}°{temp_unit} and {description}. It feels like {feels_like}°{temp_unit}. ☁️')
+      if description == 'shower rain':
+        await message.send(f'🌧️ {city} is {temperature}°{temp_unit} and {description}. It feels like {feels_like}°{temp_unit}. 🌧️')
+      if description == 'rain':
+        await message.send(f'🌧️ {city} is {temperature}°{temp_unit} and {description}. It feels like {feels_like}°{temp_unit}. 🌧️')
+      if description == 'thunderstorm':
+        await message.send(f'⛈️ {city} is {temperature}°{temp_unit} and {description}. It feels like {feels_like}°{temp_unit}. ⛈️')
+      if description == 'snow':
+        await message.send(f'❄️ {city} is {temperature}°{temp_unit} and {description}. It feels like {feels_like}°{temp_unit}. ❄️')
+      if description == 'mist':
+        await message.send(f'🌫️ {city} is {temperature}°{temp_unit} and {description}. It feels like {feels_like}°{temp_unit}. 🌫️')
+      if description == 'overcast clouds':
+        await message.send(f'☁️ {city} is {temperature}°{temp_unit} and {description}. It feels like {feels_like}°{temp_unit}. ☁️')
+    else:
+      await message.send(f'{city} is {temperature}°{temp_unit}. It feels like {feels_like}°{temp_unit}.')
+  else:
+    print('error', response.status_code)
+
+
+
 @bot.command(name='draw')
 async def draw_card(message):
   tarot_deck = [  "The Fool",  "The Magician",  "The High Priestess",  "The Empress",  "The Emperor",  "The Hierophant",  "The Lovers",  "The Chariot",  "Strength",  "The Hermit",  "Wheel of Fortune",  "Justice",  "The Hanged Man",  "Death",  "Temperance",  "The Devil",  "The Tower",  "The Star",  "The Moon",  "The Sun",  "Judgement",  "The World",  "Ace of Wands",  "Two of Wands",  "Three of Wands",  "Four of Wands",  "Five of Wands",  "Six of Wands",  "Seven of Wands",  "Eight of Wands",  "Nine of Wands",  "Ten of Wands",  "Page of Wands",  "Knight of Wands",  "Queen of Wands",  "King of Wands",  "Ace of Cups",  "Two of Cups",  "Three of Cups",  "Four of Cups",  "Five of Cups",  "Six of Cups",  "Seven of Cups",  "Eight of Cups",  "Nine of Cups",  "Ten of Cups",  "Page of Cups",  "Knight of Cups",  "Queen of Cups",  "King of Cups",  "Ace of Swords",  "Two of Swords",  "Three of Swords",  "Four of Swords",  "Five of Swords",  "Six of Swords",  "Seven of Swords",  "Eight of Swords",  "Nine of Swords",  "Ten of Swords",  "Page of Swords",  "Knight of Swords",  "Queen of Swords",  "King of Swords",  "Ace of Pentacles",  "Two of Pentacles",  "Three of Pentacles",  "Four of Pentacles",  "Five of Pentacles",  "Six of Pentacles",  "Seven of Pentacles",  "Eight of Pentacles",  "Nine of Pentacles",  "Ten of Pentacles",  "Page of Pentacles",  "Knight of Pentacles",  "Queen of Pentacles",  "King of Pentacles"]
@@ -245,6 +291,7 @@ async def four_twenty_emote(message):
 async def battle_streamraiders_url(message):
   await message.send("!battle")
 
+
 @bot.command(name="addquote")
 async def add_quote(message):
   await message.send("!addquote")
@@ -270,7 +317,7 @@ async def pokemon_appears(message):
   if "Pokemon" in str(message.message):
     await message.send("sherbo4Pinocchio")
   if message.author.name == "PokemonCommunityGame" and "90s" in message.message.content:
-
+    # if this emoji is in the memo :x:
     await message.send("!pokecheck")
 
 @bot.command(name='test')
