@@ -211,6 +211,10 @@ async def weather_command(message, location):
       temperature = round((temperature - 32) * 5/9)
       feels_like = round((feels_like - 32) * 5/9)
       temp_unit = 'C'
+    if ('k' or 'K') in message.message.content.lower():
+      temperature = round((temperature - 32) * 5/9 + 273.15)
+      feels_like = round((feels_like - 32) * 5/9 + 273.15)
+      temp_unit = 'K'
     else:
       temp_unit = 'F'
     if description:
