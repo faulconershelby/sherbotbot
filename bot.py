@@ -152,6 +152,7 @@ async def sun_sign_command(message):
   user_month = None
   user_day = None
   print('words', words, "message_content", message_content)
+  # check if index 0 is integer or string to decide what is month or day
   month = words[0]
   day = words[1]
   print('month', month, 'day', day)
@@ -202,6 +203,7 @@ async def weather_command(message, location):
   url = f'https://api.openweathermap.org/data/2.5/weather?q={location}&appid={OPENWEATHER_KEY}&units=imperial'
   response = requests.get(url)
   data = response.json()
+  await message.send("... fetching ur weather ...")
   if response.status_code == 200:
     temperature= data['main']['temp']
     feels_like = data['main']['feels_like']
@@ -316,13 +318,14 @@ async def jackbox(message):
 async def ultra(message):
   await message.send("!pokecatch ultraball")
 
-@bot.event()
+
 async def pokemon_appears(message):
-  if "Pokemon" in str(message.message):
+  if "Pokemon" in message.message.content:
     await message.send("sherbo4Pinocchio")
   if message.author.name == "PokemonCommunityGame" and "90s" in message.message.content:
-    # if this emoji is in the memo :x:
     await message.send("!pokecheck")
+  if '\U0001F4A9' in message.message.content:
+    await message.send("~ultra")
 
 @bot.command(name='test')
 async def test(message):
