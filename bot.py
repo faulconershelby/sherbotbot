@@ -5,6 +5,7 @@ import openai
 import twitchio
 import requests
 import datetime
+import pytz
 from twitchio import Message
 from twitchio.ext import commands
 from twitchio.errors import TwitchIOException
@@ -322,14 +323,14 @@ async def jackbox(message):
 async def ultra(message):
   await message.send("!pokecatch ultraball")
 
-# @bot.command(name="")
-# async def pokemon_appears(message):
-#   if "Pokemon" in message.message.content:
-#     await message.send("sherbo4Pinocchio")
-#   if message.author.name == "PokemonCommunityGame" and "90s" in message.message.content:
-#     await message.send("!pokecheck")
-#   if '\U0001F4A9' in message.message.content:
-#     await message.send("~ultra")
+@bot.event(name="")
+async def pokemon_appears(message):
+  if "Pokemon" in message.message.content:
+    await message.send("sherbo4Pinocchio")
+  if message.author.name == "PokemonCommunityGame" and "90s" in message.message.content:
+    await message.send("!pokecheck")
+  if '\U0001F4A9' in message.message.content:
+    await message.send("~ultra")
 
 @bot.command(name='test')
 async def test(message):
