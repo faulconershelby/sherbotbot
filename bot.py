@@ -198,6 +198,7 @@ async def sun_sign_command(message):
   except ValueError as e:
     print(str(e))
 
+
 @bot.command(name="weather")
 async def weather_command(message, location):
   url = f'https://api.openweathermap.org/data/2.5/weather?q={location}&appid={OPENWEATHER_KEY}&units=imperial'
@@ -209,7 +210,8 @@ async def weather_command(message, location):
     feels_like = data['main']['feels_like']
     description = data['weather'][0]['description']
     city = data['name']
-    if ('c' or 'C') in message.message.content.lower():
+    temp_unit = 'F'
+    if 'c' in str(message.message.content) or 'C' in str(message.message.content):
       temperature = round((temperature - 32) * 5/9)
       feels_like = round((feels_like - 32) * 5/9)
       temp_unit = 'C'
@@ -217,8 +219,6 @@ async def weather_command(message, location):
       temperature = round((temperature - 32) * 5/9 + 273.15)
       feels_like = round((feels_like - 32) * 5/9 + 273.15)
       temp_unit = 'K'
-    else:
-      temp_unit = 'F'
     if description:
       if description == 'clear sky':
         await message.send(f'🌞 {city} is {temperature}°{temp_unit} and {description}. It feels like {feels_like}°{temp_unit}. 🌞')
