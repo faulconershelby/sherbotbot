@@ -277,6 +277,10 @@ async def subraid(message):
 async def pinocchio_emote(message):
   await message.send("sherbo4Pinocchio sherbo4Awoooo sherbo4Pinocchio sherbo4Awoooo sherbo4Pinocchio sherbo4Awoooo sherbo4Pinocchio sherbo4Awoooo sherbo4Pinocchio sherbo4Awoooo sherbo4Pinocchio sherbo4Awoooo sherbo4Pinocchio sherbo4Awoooo sherbo4Pinocchio sherbo4Awoooo sherbo4Pinocchio sherbo4Awoooo sherbo4Pinocchio sherbo4Awoooo sherbo4Pinocchio")
 
+@bot.command(name="awooo")
+async def awooo_emote(message):
+  await message.send("sherbo4Awoooo sherbo4Awoooo sherbo4Awoooo sherbo4Awoooo sherbo4Awoooo sherbo4Awoooo sherbo4Awoooo sherbo4Awoooo sherbo4Awoooo sherbo4Awoooo sherbo4Awoooo sherbo4Awoooo sherbo4Awoooo sherbo4Awoooo sherbo4Awoooo sherbo4Awoooo sherbo4Awoooo sherbo4Awoooo sherbo4Awoooo sherbo4Awoooo sherbo4Awoooo sherbo4Awoooo sherbo4Awoooo")
+
 @bot.command(name="hype")
 async def hype_emote(message):
   await message.send("sherbo4Catscream ✨ sherbo4Hype ✨ sherbo4Hype ✨ sherbo4Hype ✨ sherbo4Hype ✨ sherbo4Hype ✨ sherbo4Hype ✨ sherbo4Hype ✨ sherbo4Hype ✨ sherbo4Hype ✨ sherbo4Hype ✨ sherbo4Hype ✨ sherbo4Hype ✨ sherbo4Hype ✨ sherbo4Hype ✨ sherbo4Hype ✨ sherbo4Hype ✨ sherbo4Hype ✨ sherbo4Hype ✨ sherbo4Hype ✨ sherbo4Hype ✨ sherbo4Hype ✨ sherbo4Hype ✨ sherbo4Hype ✨ sherbo4Hype ✨ sherbo4Hype ✨ sherbo4Hype ✨ sherbo4Hype ✨ sherbo4Hype ✨ sherbo4Hype ✨ sherbo4Hype ✨ sherbo4Hype ✨ sherbo4Hype ✨ sherbo4Hype ✨ sherbo4Catscream")
@@ -318,14 +322,14 @@ async def jackbox(message):
 async def ultra(message):
   await message.send("!pokecatch ultraball")
 
-
-async def pokemon_appears(message):
-  if "Pokemon" in message.message.content:
-    await message.send("sherbo4Pinocchio")
-  if message.author.name == "PokemonCommunityGame" and "90s" in message.message.content:
-    await message.send("!pokecheck")
-  if '\U0001F4A9' in message.message.content:
-    await message.send("~ultra")
+# @bot.command(name="")
+# async def pokemon_appears(message):
+#   if "Pokemon" in message.message.content:
+#     await message.send("sherbo4Pinocchio")
+#   if message.author.name == "PokemonCommunityGame" and "90s" in message.message.content:
+#     await message.send("!pokecheck")
+#   if '\U0001F4A9' in message.message.content:
+#     await message.send("~ultra")
 
 @bot.command(name='test')
 async def test(message):
