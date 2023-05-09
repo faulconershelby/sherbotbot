@@ -1,7 +1,7 @@
 import os
 import re
 import random
-import openai
+# import openai
 import twitchio
 import requests
 import datetime
@@ -303,21 +303,9 @@ async def battle_streamraiders_url(message):
   await message.send("!battle")
 
 
-@bot.command(name="addquote")
-async def add_quote(message):
-  await message.send("!addquote")
-
 @bot.command(name="quote")
 async def quote(message):
   await message.send("!quote")
-
-@bot.command(name="jb")
-async def jb(message):
-  await message.send("!jackbox")
-
-@bot.command(name="jackbox")
-async def jackbox(message):
-  await message.send("!jackbox")
 
 @bot.command(name="ultra")
 async def ultra(message):
