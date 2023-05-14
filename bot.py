@@ -212,14 +212,17 @@ async def weather_command(message, location):
     description = data['weather'][0]['description']
     city = data['name']
     temp_unit = 'F'
-    if 'c' in str(message.message.content) or 'C' in str(message.message.content):
-      temperature = round((temperature - 32) * 5/9)
-      feels_like = round((feels_like - 32) * 5/9)
-      temp_unit = 'C'
-    if ('k' or 'K') in message.message.content.lower():
-      temperature = round((temperature - 32) * 5/9 + 273.15)
-      feels_like = round((feels_like - 32) * 5/9 + 273.15)
-      temp_unit = 'K'
+    if len(str(message.message.content).split()) == 3:
+      temp_input = str(message.message.content).split()[-1]
+      print(temp_input, len(str(message.message.content).split()))
+      if 'c' in temp_input or 'C' in temp_input:
+        temperature = round((temperature - 32) * 5/9)
+        feels_like = round((feels_like - 32) * 5/9)
+        temp_unit = 'C'
+      if ('k' or 'K') in temp_input:
+        temperature = round((temperature - 32) * 5/9 + 273.15)
+        feels_like = round((feels_like - 32) * 5/9 + 273.15)
+        temp_unit = 'K'
     if description:
       if description == 'clear sky':
         await message.send(f'🌞 {city} is {temperature}°{temp_unit} and {description}. It feels like {feels_like}°{temp_unit}. 🌞')
