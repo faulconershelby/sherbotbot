@@ -15,7 +15,6 @@ from bot import *
 
 # command: flip_coin()
 
-#@todo command for all commands
 # command(sherbotbot)
 
 #commands: sun_sign_command()
