@@ -11,6 +11,21 @@ from twitchio.ext import commands
 from twitchio.errors import TwitchIOException
 from dotenv import load_dotenv
 
+SNOWMAN_MIN_WORD_LENGTH = 5
+SNOWMAN_MAX_WORD_LENGTH = 8
+SNOWMAN_MAX_WRONG_GUESSES = 7
+
+SNOWMAN_IMAGE = [
+    '*   *   *  ',
+    ' *   _ *   ',
+    '   _[_]_ * ',
+    '  * (")    ',
+    '  \( : )/ *',
+    '* (_ : _)  ',
+    '-----------',
+]
+
+
 # @todo: add a command to add a new command
 # @todo: add a command to remove a command
 
@@ -93,6 +108,81 @@ async def say_hello(message):
 #   response = generate_response(message.message.content)
 #   #send response to chat
 #   await message.send(response)
+
+# def build_snowman_graphic(num_wrong_guesses):
+#   lines = SNOWMAN_IMAGE[:num_wrong_guesses - 1]
+#   return '\n'.join(lines)
+
+# @bot.command(name='snowman')
+# async def play_snowman(message):
+#   snowman_words = []
+#   snowman_word = random.choice(snowman_words)
+#   snowman_letters_guessed = build_word_dict(snowman_word)
+#   wrong_letters = []
+  
+#   await message.send(f'play snowman! guess a letter to start, the word is {len(snowman_word)} letters long')
+
+#   while len(wrong_letters) < SNOWMAN_MAX_WRONG_GUESSES:
+#     await message.send(build_snowman_graphic(snowman_word, snowman_letters_guessed))
+#     await message.send('enter your guess with ~guess <letter>')
+  
+#     def check_guess(message):
+#       return message.author == message.author and message.content.startswith('~guess')
+#     try: 
+#       guess_message = await bot.wait_for('message', check=check_guess, timeout=30)
+#     except asyncio.TimeoutError:
+#       await message.send('sorry, you took too long to guess')
+#       return
+#     guess = guess_message.content.split()[1].lower()
+    
+#     if len(guess) != 1 or not in guess.isalpha():
+#       await message.send('please guess a single letter')
+#       continue
+    
+#     if guess in snowman_letters_guessed:
+#       if snowman_letters_guessed[guess]:
+#         await message.send(f'correct! {guess} is in the word')
+#       else:
+#         await message.send(f'sorry, {guess} is NOT in the word')
+#         add_wrong_letter(wrong_letters, guess)
+#     await message.send(f'game over! the word was {snowman_word}, try again!') 
+    
+#   def build_word_dict(word):
+#     word_dict = {}
+#     for letter in word:
+#       if letter != ' ':
+#         word_dict[letter] = False
+#     return word_dict
+
+#   def is_word_guessed(word_dict):
+#     for letter in word_dict.values():
+#       if not letter:
+#         return False
+#     return True
+
+#   def build_game_board(word, word_dict):
+#     output_letters = []
+#     for letter in word:
+#       if letter in word_dict:
+#         output_letters.append(letter)
+#       elif word_dict[letter]:
+#         output_letters.append(letter)
+#       else:
+#         output_letters.append('_')
+      
+#     return ' '.join(output_letters)
+
+#   def add_wrong_letter(wrong_letters, letter):
+#     if letter not in wrong_letters:
+#       wrong_letters.append(letter)
+    
+#     def print_wrong_letters(wrong_letters):
+#       if not wrong_letters:
+#         return ''
+#       return print('wrong letters: ', ' '.join(wrong_letters))
+
+
+
 
 @bot.command(name='dice')
 async def roll_dice(message):
