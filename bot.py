@@ -354,7 +354,8 @@ async def draw_card(message):
     num_cards = 1
   for i in range(num_cards):
     card = random.choice(tarot_deck)
-    hand.append(card)
+    if card not in hand:
+      hand.append(card)
   await message.send(f'{message.author.name} drew {hand}')
   
 @bot.command(name='8ball')
